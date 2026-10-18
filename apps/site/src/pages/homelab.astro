@@ -1,0 +1,119 @@
+---
+import "../styles/global.css";
+import "../components/homelab/diagram.css";
+import { Icon } from "astro-icon/components";
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import SocialLink from "../components/common/SocialLink.astro";
+import Network from "../components/homelab/Network.astro";
+import Infrastructure from "../components/homelab/Infrastructure.astro";
+import Management from "../components/homelab/Management.astro";
+import { repoUrl } from "../components/homelab/data";
+
+const views = [
+  {
+    id: "reseau",
+    title: "Réseau",
+    text: "Depuis Internet, seul WireGuard est ouvert. Sur le LAN comme via le VPN, Blocky résout chaque service vers Caddy, qui termine le TLS. Le pare-feu des conteneurs n'accepte que Caddy, et l'authentification passe par TinyAuth.",
+    diagram: Network,
+  },
+  {
+    id: "infrastructure",
+    title: "Infrastructure",
+    text: "Un seul serveur sous Proxmox, avec un conteneur LXC par rôle. Les fichiers sont sur un miroir ZFS de deux disques, monté dans le conteneur Docker.",
+    diagram: Infrastructure,
+  },
+  {
+    id: "gestion",
+    title: "Gestion",
+    text: "Terraform crée les conteneurs et leur pare-feu, puis Ansible configure ce qui tourne dedans. L'état Terraform est stocké dans le homelab, sur Garage, et GitHub n'a aucun accès au réseau.",
+    diagram: Management,
+  },
+];
+
+const choices = [
+  {
+    title: "Fermé par défaut",
+    text: "Un conteneur n'ouvre que les ports qu'une règle de pare-feu autorise. Postgres et Redis ne sortent pas de leur réseau Compose.",
+  },
+  {
+    title: "Un seul compte",
+    text: "Les comptes sont dans lldap. TinyAuth sert de fournisseur OIDC pour Grafana, Proxmox et AFFiNE, et de forward-auth pour Filestash.",
+  },
+  {
+    title: "Télémétrie corrélée",
+    text: "Harmony envoie ses traces, logs et métriques en OpenTelemetry. Dans Grafana, on passe d'une trace à ses logs et inversement.",
+  },
+  {
+    title: "Secrets et mises à jour",
+    text: "Les secrets sont chiffrés avec SOPS et age, directement dans le dépôt. Renovate ouvre les PR de mise à jour et semantic-release publie les versions.",
+  },
+];
+---
+
+<Layout
+  title="Homelab - Antoine JOSSET"
+  description="Mon homelab Proxmox, décrit en code avec Terraform et Ansible."
+>
+  <Header showTitle={false} />
+
+  <section class="px-6 flex flex-col gap-3" aria-labelledby="homelab-title">
+    <a
+      href="/"
+      class="pressable inline-flex w-fit items-center gap-1.5 rounded-sm text-sm text-muted outline-none hover:text-primary focus-visible:ring-2 focus-visible:ring-ring"
+    >
+      <Icon name="right-arrow" class="size-3.5 rotate-180" aria-hidden="true" />
+      Retour
+    </a>
+    <h1
+      id="homelab-title"
+      class="text-2xl font-semibold leading-7 tracking-tight"
+    >
+      Homelab
+    </h1>
+    <p class="leading-7 text-muted">
+      Un serveur Proxmox chez moi, qui héberge Harmony, ma supervision et
+      quelques outils. Le dépôt public décrit tout : Terraform crée les
+      conteneurs, Ansible les configure.
+    </p>
+    <div class="mt-1 flex">
+      <SocialLink
+        href={repoUrl}
+        icon="github"
+        text="aBgAmeuR/homelab"
+        title="Dépôt du homelab sur GitHub"
+      />
+    </div>
+  </section>
+
+  {
+    views.map(({ id, title, text, diagram: Diagram }) => (
+      <section class="mt-8 pb-8 flex flex-col gap-6" aria-labelledby={id}>
+        <div class="px-6 flex flex-col gap-1">
+          <h2 id={id} class="font-semibold">
+            {title}
+          </h2>
+          <p class="leading-7 text-muted">{text}</p>
+        </div>
+        <Diagram />
+      </section>
+    ))
+  }
+
+  <section class="mt-16 px-6 flex flex-col gap-4" aria-labelledby="choix">
+    <h2 id="choix" class="font-semibold">Choix techniques</h2>
+    <dl class="grid gap-x-6 gap-y-4 sm:grid-cols-2">
+      {
+        choices.map((choice) => (
+          <div>
+            <dt class="text-sm font-medium">{choice.title}</dt>
+            <dd class="mt-0.5 text-sm leading-6 text-muted">{choice.text}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <Footer showProjectsButton={false} />
+</Layout>

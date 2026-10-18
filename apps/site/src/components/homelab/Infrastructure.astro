@@ -1,0 +1,62 @@
+---
+import Card from "./Card.astro";
+import Glyph from "./Glyph.astro";
+import Resources from "./Resources.astro";
+import { guests } from "./data";
+import { Icon } from "astro-icon/components";
+---
+
+<div class="diagram">
+  <figure aria-label="Vue infrastructure : du serveur physique aux services">
+    <div class="uplink">
+      <span class="chip"><Glyph name="home" />Réseau local</span>
+    </div>
+
+    <div class="down stem"></div>
+
+    <section class="zone" aria-label="Serveur physique">
+      <p class="zone-label"><Glyph name="server" />Serveur physique · pve</p>
+
+      <section class="zone" aria-label="Proxmox VE">
+        <p class="zone-label">
+          <span class="mark"><Icon name="proxmox" class="logo" aria-hidden="true" /></span>
+          Proxmox VE · hyperviseur
+        </p>
+
+        <div class="bus"><Glyph name="network" />vmbr0 <span>pont réseau</span></div>
+        <div class="taps" aria-hidden="true">{guests.map(() => <i />)}</div>
+
+        <div class="guests">
+          {
+            guests.map((guest) => (
+              <Card stack tag={`CT ${guest.id}`} title={guest.name} logo={guest.logo} tall={guest.tall}>
+                <p>
+                  {guest.role}
+                  {guest.apps && (
+                    <>
+                      <br />
+                      {guest.apps}
+                    </>
+                  )}
+                </p>
+                <Resources guest={guest} />
+              </Card>
+            ))
+          }
+        </div>
+      </section>
+
+      <div class="storage">
+        <div class="mount">
+          <span class="wire-label">montage mp0</span>
+        </div>
+        <Card class="lvm" tag="local-lvm" title="Disques des conteneurs" icon="disk">
+          <p>système et données de chaque LXC</p>
+        </Card>
+        <Card class="hdd" tag="/hdd" title="Fichiers" logo="openzfs">
+          <p>pool ZFS · miroir de 2 disques</p>
+        </Card>
+      </div>
+    </section>
+  </figure>
+</div>

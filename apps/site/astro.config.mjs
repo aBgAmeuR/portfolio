@@ -29,6 +29,9 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      include: ["astro > @astrojs/internal-helpers > picomatch"],
+    },
   },
 
   fonts: [{
@@ -36,6 +39,12 @@ export default defineConfig({
     name: "Geist",
     weights: [400, 500, 600, 700],
     cssVariable: "--font-sans",
+    subsets: ["latin"],
+  }, {
+    provider: fontProviders.google(),
+    name: "Geist Mono",
+    weights: [400, 500, 600],
+    cssVariable: "--font-mono",
     subsets: ["latin"],
   }],
 

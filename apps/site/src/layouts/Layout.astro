@@ -3,9 +3,13 @@ import { Font } from "astro:assets";
 
 export interface Props {
 	title?: string;
+	description?: string;
 }
 
-const { title = "Portfolio - Antoine JOSSET" } = Astro.props;
+const {
+	title = "Portfolio - Antoine JOSSET",
+	description = "Développeur full stack basé à Rennes, France. Portfolio présentant mes projets et compétences en développement web.",
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -24,13 +28,14 @@ const { title = "Portfolio - Antoine JOSSET" } = Astro.props;
 		<title>{title}</title>
 		<meta
 			name="description"
-			content="Développeur full stack basé à Rennes, France. Portfolio présentant mes projets et compétences en développement web."
+			content={description}
 		/>
 		<meta name="author" content="Antoine JOSSET" />
 		<meta name="robots" content="index, follow" />
 		
 
 		<Font cssVariable="--font-sans" preload />
+		<Font cssVariable="--font-mono" />
 	</head>
 	<body class="bg-background antialiased text-primary font-sans">
 		<main class="w-full mx-auto max-w-2xl pt-16 md:pt-32">

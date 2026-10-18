@@ -24,9 +24,14 @@ const work = [
 
 <section class="mt-12 px-6 flex flex-col gap-2" aria-labelledby="work-title">
     <SectionTitle title="Expériences" id="work-title" />
-    <div class="space-y-4">
+    <ul
+        class="space-y-4"
+        aria-label="Liste des expériences professionnelles"
+    >
         {work.map((workItem) => (
-            <WorkExperience {...workItem} />
+            <li>
+                <WorkExperience {...workItem} />
+            </li>
         ))}
-    </div>
+    </ul>
 </section>

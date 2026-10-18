@@ -1,0 +1,44 @@
+---
+import Ico from "./Ico.astro";
+
+export interface Props {
+  title: string;
+  tag?: string;
+  logo?: string;
+  icon?: string;
+  tall?: boolean;
+  stack?: boolean;
+  accent?: boolean;
+  class?: string;
+  style?: string;
+}
+
+const { title, tag, logo, icon, tall, stack = false, accent = false, class: className, style } = Astro.props;
+---
+
+<article class:list={["card", stack && "stack", accent && "key", className]} style={style}>
+  {
+    stack ? (
+      <>
+        <div class="top">
+          <Ico logo={logo} icon={icon} tall={tall} />
+          {tag && <p class="tag">{tag}</p>}
+        </div>
+        <div>
+          <h3>{title}</h3>
+          <slot />
+        </div>
+      </>
+    ) : (
+      <>
+        <Ico logo={logo} icon={icon} tall={tall} />
+        <div>
+          {tag && <p class="tag">{tag}</p>}
+          <h3>{title}</h3>
+          <slot />
+        </div>
+        <slot name="below" />
+      </>
+    )
+  }
+</article>

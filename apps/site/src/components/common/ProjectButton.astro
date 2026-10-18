@@ -3,33 +3,20 @@ import { Icon } from "astro-icon/components";
 
 export interface Props {
   href: string;
-  variant: "demo" | "code";
-  text: string;
+  project: string;
 }
 
-const { href, variant, text } = Astro.props;
-
-const variantClasses =
-  variant === "demo"
-    ? "text-xs font-semibold text-white bg-secondary no-underline  px-2 py-1 rounded-md outline-none hover:bg-secondary/90 focus-visible:ring-2 focus-visible:ring-ring ring-offset-card focus-visible:ring-offset-2"
-    : "inline-flex items-center text-xs leading-4 no-underline text-primary p-1 rounded-md border border-border hover:text-primary/90 outline-none focus-visible:ring-2 focus-visible:ring-ring ring-offset-card focus-visible:ring-offset-2";
-
-const ariaLabel =
-  variant === "demo"
-    ? `Tester le projet (${text}) - s'ouvre dans un nouvel onglet`
-    : `Voir le code source (${text}) - s'ouvre dans un nouvel onglet`;
-
-const title = variant === "demo" ? "Tester le projet" : "Voir le code source";
+const href: string = Astro.props.href;
+const project: string = Astro.props.project;
 ---
 
 <a
   href={href}
   target="_blank"
   rel="noreferrer noopener"
-  class={variantClasses}
-  aria-label={ariaLabel}
-  title={title}
+  class="pressable pressable-tint inline-flex items-center gap-1.5 h-7 -my-2 px-2 -mr-1.5 text-xs font-medium text-muted no-underline rounded-md outline-none hover:text-primary hover:bg-foreground focus-visible:ring-2 focus-visible:ring-ring ring-offset-card focus-visible:ring-offset-2"
+  aria-label={`Voir le code de ${project} sur GitHub - s'ouvre dans un nouvel onglet`}
 >
-  {variant === "code" && <Icon name="github" class="size-3 mr-1" aria-hidden="true" />}
-  {text}
+  <!-- <Icon name="github" class="pointer-events-none size-3.5 shrink-0" aria-hidden="true" /> -->
+  GitHub
 </a>

@@ -1,0 +1,43 @@
+---
+const values = [32, 52, 44, 70, 58, 45, 88, 94];
+const width = 200;
+const height = 48;
+const padY = 8;
+
+const points: [number, number][] = values.map((value, index) => [
+  (index * width) / (values.length - 1),
+  height - padY - (value / 100) * (height - padY * 2),
+]);
+
+const at = (index: number): [number, number] =>
+  points[Math.min(Math.max(index, 0), points.length - 1)] ?? [0, 0];
+
+const line = points
+  .map(([x, y], index) => {
+    if (index === 0) return `M ${x},${y}`;
+    const [px, py] = at(index - 1);
+    const [bx, by] = at(index - 2);
+    const [nx, ny] = at(index + 1);
+    return `C ${px + (x - bx) / 6},${py + (y - by) / 6} ${x - (nx - px) / 6},${y - (ny - py) / 6} ${x},${y}`;
+  })
+  .join(" ");
+---
+
+<svg
+  class="size-full text-secondary"
+  viewBox={`0 0 ${width} ${height}`}
+  preserveAspectRatio="none"
+  aria-hidden="true"
+>
+  <path
+    d={`${line} L ${width},${height} L 0,${height} Z`}
+    fill="currentColor"
+    fill-opacity="0.18"></path>
+  <path
+    d={line}
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.75"
+    stroke-linecap="round"
+    vector-effect="non-scaling-stroke"></path>
+</svg>

@@ -1,17 +1,19 @@
 ---
 import TechnologyTooltip from "./TechnologyTooltip.astro";
 import ProjectButton from "./ProjectButton.astro";
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
+
+type Technology = {
+  name: string;
+  icon: string;
+};
 
 export interface Props {
   title: string;
   description: string;
   image: ImageMetadata | string;
   imageAlt?: string;
-  technologies: Array<{
-    name: string;
-    icon: string;
-  }>;
+  technologies: Technology[];
   demoUrl?: string;
   codeUrl?: string;
 }
@@ -21,24 +23,27 @@ const {
   description,
   image,
   imageAlt = "Project image",
-  technologies,
   demoUrl,
   codeUrl,
 } = Astro.props;
+
+const technologies: Technology[] = Astro.props.technologies;
+const titleId = `project-title-${title.replace(/\s+/g, "-").toLowerCase()}`;
+const descId = `project-desc-${title.replace(/\s+/g, "-").toLowerCase()}`;
 ---
 
 <article
   class="group"
   role="article"
-  aria-labelledby={`project-title-${title.replace(/\s+/g, "-").toLowerCase()}`}
-  aria-describedby={`project-desc-${title.replace(/\s+/g, "-").toLowerCase()}`}
+  aria-labelledby={titleId}
+  aria-describedby={descId}
 >
   <div
     class="flex w-full flex-col gap-2 rounded-2xl border border-border bg-card p-3"
   >
     <div class="w-full overflow-hidden rounded-xl aspect-video object-fill">
       {
-        typeof image === 'string' ? (
+        typeof image === "string" ? (
           <video
             src={image}
             autoplay
@@ -57,22 +62,45 @@ const {
     </div>
     <div class="flex flex-1 flex-col justify-between gap-3">
       <div>
-        <h4
-          id={`project-title-${title.replace(/\s+/g, "-").toLowerCase()}`}
-          class="text-base font-medium text-primary"
-        >
-          {title}
-        </h4>
-        <p
-          id={`project-desc-${title.replace(/\s+/g, "-").toLowerCase()}`}
-          class="text-sm text-muted"
-        >
+        <div class="flex items-center justify-between gap-3">
+          <h4 id={titleId} class="text-base font-medium text-primary">
+            {title}
+          </h4>
+          {
+            demoUrl && (
+              <a
+                href={demoUrl}
+                target="_blank"
+                rel="noreferrer noopener"
+                class="group/demo mt-0.5 inline-flex items-center gap-1 text-xs font-medium text-muted underline decoration-transparent underline-offset-2 outline-none transition-[color,text-decoration-color] duration-150 ease hover:text-primary hover:decoration-current focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-card rounded-sm"
+                aria-label={`Ouvrir le site de ${title} - s'ouvre dans un nouvel onglet`}
+              >
+                Ouvrir le site
+                <svg
+                  class="size-3 shrink-0 transition-translate duration-150 ease group-hover/demo:translate-x-px group-hover/demo:-translate-y-px motion-reduce:transition-none motion-reduce:group-hover/demo:translate-x-0 motion-reduce:group-hover/demo:translate-y-0"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </a>
+            )
+          }
+        </div>
+        <p id={descId} class:list={["text-sm text-muted", demoUrl && "mt-1"]}>
           {description}
         </p>
       </div>
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between gap-3">
         <div
-          class="flex items-center gap-1"
+          class="flex min-w-0 flex-wrap items-center gap-1"
           role="group"
           aria-label={`Technologies utilisées pour ${title}`}
         >
@@ -82,22 +110,7 @@ const {
             ))
           }
         </div>
-        <div
-          class="flex items-center gap-1"
-          role="group"
-          aria-label={`Liens du projet ${title}`}
-        >
-          {
-            demoUrl && (
-              <ProjectButton href={demoUrl} variant="demo" text="Tester" />
-            )
-          }
-          {
-            codeUrl && (
-              <ProjectButton href={codeUrl} variant="code" text="Code" />
-            )
-          }
-        </div>
+        {codeUrl && <ProjectButton href={codeUrl} project={title} />}
       </div>
     </div>
   </div>

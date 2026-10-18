@@ -1,0 +1,107 @@
+---
+import Card from "./Card.astro";
+import Glyph from "./Glyph.astro";
+import Inset from "./Inset.astro";
+---
+
+<div class="diagram">
+  <figure aria-label="Vue réseau : chemin d’une requête vers les services">
+    <section class="zone outside" aria-label="Internet">
+      <p class="zone-label"><Glyph name="globe" />Internet</p>
+      <div class="duo">
+        <Card tag="Client distant" title="Client VPN" icon="laptop">
+          <p>téléphone ou portable hors du domicile</p>
+        </Card>
+        <Card tag="Certificats TLS" title="Let’s Encrypt" logo="lets-encrypt">
+          <p>pour Caddy, défi DNS Cloudflare</p>
+        </Card>
+      </div>
+    </section>
+
+    <div class="gate">
+      <span class="chip">Passerelle · seule entrée : WireGuard en UDP</span>
+    </div>
+
+    <section class="zone" aria-label="Réseau local">
+      <p class="zone-label"><Glyph name="home" />Réseau local</p>
+
+      <div class="lan-top">
+        <Card
+          class="at-wg"
+          tag="CT 118 · VPN"
+          title="WireGuard"
+          logo="wireguard"
+        >
+          <p>le client distant ressort sur le LAN</p>
+        </Card>
+        <div class="down at-tunnel">
+          <span class="wire-label"><span class="n">0</span>tunnel</span>
+        </div>
+        <Card class="at-dev" tag="Client" title="Appareils" icon="laptop">
+          <p>navigateur, sur le LAN ou via VPN</p>
+        </Card>
+        <div class="link at-dns">
+          <span class="wire-label"><span class="n">1</span>DNS</span>
+        </div>
+        <Card class="at-blocky" tag="CT 116 · DNS" title="Blocky" logo="blocky">
+          <p>chaque service → Caddy</p>
+        </Card>
+        <div class="down rev at-local"></div>
+        <Card
+          class="at-dhcp"
+          tag="CT 116 · DHCP"
+          title="dnsmasq"
+          icon="network"
+        >
+          <p>DHCP du LAN</p>
+        </Card>
+      </div>
+
+      <div class="down">
+        <span class="wire-label"><span class="n">2</span>HTTPS :443</span>
+      </div>
+
+      <Card tag="CT 113 · reverse proxy" title="Caddy" logo="caddy" accent>
+        <p>termine TLS, route selon le nom de domaine</p>
+      </Card>
+
+      <div class="down stem">
+        <span class="wire-label"><span class="n">3</span>HTTP</span>
+      </div>
+
+      <section class="fence" aria-label="Pare-feu des conteneurs">
+        <p class="fence-label">
+          <Glyph name="shield" />Pare-feu · Caddy seul autorisé
+        </p>
+        <div class="fork quad" aria-hidden="true">
+          <i></i><i></i><i></i><i></i>
+        </div>
+        <div class="trio quad">
+          <Card tag="CT 111" title="Grafana" logo="grafana">
+            <p>supervision</p>
+          </Card>
+          <Card tag="CT 115" title="Filestash" logo="filestash">
+            <p>fichiers</p>
+          </Card>
+          <Card tag="CT 115" title="AFFiNE" logo="affine">
+            <p>documents</p>
+          </Card>
+          <Card tag="CT 114" title="TinyAuth" logo="tinyauth">
+            <p>OIDC et forward-auth</p>
+            <Inset slot="below" title="lldap" tag="LDAP" n={5} logo="lldap">
+              <p>gestion des comptes</p>
+            </Inset>
+          </Card>
+        </div>
+        <div class="bracket quad" aria-hidden="true">
+          <i></i><i></i><i></i><i></i>
+        </div>
+        <p class="bracket-label">
+          <span class="wire-label"
+            ><span class="n">4</span>OIDC ou forward-auth</span
+          >
+        </p>
+      </section>
+    </section>
+  </figure>
+</div>

@@ -3,26 +3,31 @@ import Button from "./common/Button.astro";
 
 export interface Props {
   className?: string;
+  showProjectsButton?: boolean;
 }
 
-const { className = "" } = Astro.props;
+const { className = "", showProjectsButton = true } = Astro.props;
 ---
 
 <footer
   class={`relative left-1/2 mt-12 flex w-screen -translate-x-1/2 flex-col items-center gap-16 px-4 ${className}`}
   role="contentinfo"
 >
-  <Button
-    href="https://github.com/aBgAmeuR"
-    icon="github"
-    ariaLabel="Voir plus de projets sur GitHub - s'ouvre dans un nouvel onglet"
-  >
-    Voir plus de projets
-  </Button>
+  {
+    showProjectsButton && (
+      <Button
+        href="https://github.com/aBgAmeuR"
+        icon="github"
+        ariaLabel="Voir plus de projets sur GitHub - s'ouvre dans un nouvel onglet"
+      >
+        Voir plus de projets
+      </Button>
+    )
+  }
 
   <div>
     <div
-      class="mx-auto flex max-h-[45px] max-w-6xl justify-center overflow-hidden sm:max-h-[90px] md:max-h-[120px]"
+      class="mx-auto flex max-h-11.25 max-w-6xl justify-center overflow-hidden sm:max-h-22.5 md:max-h-30"
     >
       <div
         class="select-none bg-linear-to-b from-muted/40 to-background bg-clip-text text-center text-[70px] font-bold leading-none tracking-tighter text-transparent sm:text-[130px] md:text-[180px]"

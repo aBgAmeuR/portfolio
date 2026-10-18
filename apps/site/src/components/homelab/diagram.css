@@ -1,0 +1,985 @@
+/* Schémas portés depuis homelab-iac/docs/architecture-v2. Tout est scopé sous .diagram. */
+
+.diagram {
+  --bg: oklch(99% 0 0);
+  --zone: oklch(97.2% 0 0);
+  --card: oklch(100% 0 0);
+  --fg: oklch(20% 0 0);
+  --muted: oklch(52% 0 0);
+  --border: oklch(91% 0 0);
+  --edge: oklch(84% 0 0);
+  --wire: oklch(42% 0 0);
+  --accent: oklch(53% 0.14 150);
+  --sans: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --mono: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --stroke: 1.5px;
+  --gap: 10px;
+  --w: 760px;
+
+  container: diagram / inline-size;
+  position: relative;
+  left: 50%;
+  width: min(var(--w), 100vw - 32px);
+  transform: translateX(-50%);
+  color: var(--fg);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.dark .diagram {
+  --bg: oklch(14% 0 0);
+  --zone: oklch(17.5% 0 0);
+  --card: oklch(21% 0 0);
+  --fg: oklch(97% 0 0);
+  --muted: oklch(72% 0 0);
+  --border: oklch(27% 0 0);
+  --edge: oklch(37% 0 0);
+  --wire: oklch(75% 0 0);
+  --accent: oklch(63% 0.17 149);
+}
+
+.diagram {
+
+/* Zones et frontières */
+
+.zone {
+  position: relative;
+  padding: 34px 14px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--zone);
+}
+
+.zone .zone {
+  background: var(--bg);
+}
+
+.zone.outside {
+  background: transparent;
+}
+
+.zone-label {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font: 500 11px/1.2 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.fence {
+  position: relative;
+  padding: 0 12px 12px;
+  border: var(--stroke) dashed var(--muted);
+  border-radius: 10px;
+}
+
+.fence-label {
+  position: absolute;
+  top: 0;
+  left: 12px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0 6px;
+  transform: translateY(-50%);
+  background: var(--zone);
+  font: 500 11.5px/1.4 var(--mono);
+}
+
+/* Cartes */
+
+.card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  background: var(--card);
+}
+
+.card {
+  flex-wrap: wrap;
+}
+
+.card > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.card > .inset {
+  flex: 1 0 100%;
+  margin-top: 2px;
+}
+
+.card.stack {
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card .top {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+}
+
+.card .top .tag {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.card.key {
+  border: var(--stroke) solid var(--accent);
+}
+
+.card.manual {
+  border-style: dashed;
+  background: transparent;
+}
+
+/* Icônes */
+
+.icon {
+  flex: none;
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ico {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: #1a1a1a;
+}
+
+.ico.sm {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+}
+
+.ico.sm .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.key .ico {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.manual .ico {
+  border-style: dashed;
+  color: var(--muted);
+}
+
+.zone-label .icon,
+.fence-label .icon,
+.chip .icon,
+.bus .icon {
+  width: 13px;
+  height: 13px;
+}
+
+.logo {
+  width: 19px;
+  height: 19px;
+  display: block;
+  object-fit: contain;
+}
+
+.logo.tall {
+  width: 24px;
+  height: 24px;
+}
+
+.ico.sm .logo {
+  width: 15px;
+  height: 15px;
+}
+
+.zone-label .logo,
+.bus .logo,
+.chip .logo {
+  width: 14px;
+  height: 14px;
+}
+
+.mark {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.zone-label .mark .logo {
+  width: 13px;
+  height: 13px;
+}
+
+.tag {
+  margin: 0 0 2px;
+  font: 11px/1.4 var(--mono);
+  color: var(--muted);
+}
+
+.card h3,
+.inset h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.card p:not(.tag) {
+  margin: 2px 0 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.solo {
+  max-width: 340px;
+  margin: 0 auto;
+}
+
+.inset {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 7px 9px;
+  border: var(--stroke) dashed var(--muted);
+  border-radius: 6px;
+}
+
+.inset h4 {
+  font-size: 13px;
+}
+
+.chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border: 1px solid var(--edge);
+  border-radius: 999px;
+  background: var(--bg);
+  font: 12px/1.35 var(--mono);
+}
+
+/* Libellés de flux */
+
+.n {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--bg);
+  font: 600 10.5px/1 var(--mono);
+}
+
+.wire-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 12px/1.35 var(--mono);
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+/* Flèche verticale */
+
+.down {
+  position: relative;
+  min-height: 30px;
+}
+
+.down::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 6px;
+  left: var(--x, 50%);
+  width: var(--stroke);
+  margin-left: calc(var(--stroke) / -2);
+  background: var(--wire);
+}
+
+.down::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: var(--x, 50%);
+  margin-left: -5px;
+  border: 5px solid transparent;
+  border-top: 7px solid var(--wire);
+  border-bottom: 0;
+}
+
+.down.stem::before {
+  bottom: 0;
+}
+
+.down.stem::after {
+  display: none;
+}
+
+.down > .wire-label {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--x, 50%) + 12px);
+  transform: translateY(-50%);
+}
+
+/* Flèche horizontale */
+
+.link {
+  position: relative;
+  min-width: 0;
+  min-height: 40px;
+  align-self: center;
+}
+
+.link::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 6px;
+  height: var(--stroke);
+  margin-top: calc(var(--stroke) / -2);
+  background: var(--wire);
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  margin-top: -5px;
+  border: 5px solid transparent;
+  border-left: 7px solid var(--wire);
+  border-right: 0;
+}
+
+.link.two::before {
+  left: 6px;
+}
+
+.link.two > i {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  margin-top: -5px;
+  border: 5px solid transparent;
+  border-right: 7px solid var(--wire);
+  border-left: 0;
+}
+
+.link > .wire-label {
+  position: absolute;
+  bottom: calc(50% + 6px);
+  left: 10px;
+  right: 14px;
+  justify-content: center;
+}
+
+/* ─── Réseau ─────────────────────────────────────────────── */
+
+.gate {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.gate::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-top: var(--stroke) dashed var(--muted);
+}
+
+.duo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap);
+}
+
+.pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 130px minmax(0, 1fr);
+}
+
+.pair + .down,
+.lan-top + .down {
+  --x: calc((100% - 130px) / 4);
+}
+
+/* WireGuard et dnsmasq en haut, Appareils et Blocky en dessous */
+
+.lan-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 130px minmax(0, 1fr);
+}
+
+.lan-top > .at-wg { grid-area: 1 / 1; }
+.lan-top > .at-tunnel { grid-area: 2 / 1; }
+.lan-top > .at-dev { grid-area: 3 / 1; }
+.lan-top > .at-dns { grid-area: 3 / 2; }
+.lan-top > .at-blocky { grid-area: 3 / 3; }
+.lan-top > .at-local { grid-area: 2 / 3; }
+.lan-top > .at-dhcp { grid-area: 1 / 3; }
+
+
+.trio,
+.fork,
+.bracket {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap);
+}
+
+.fork,
+.bracket {
+  position: relative;
+}
+
+.fork {
+  height: 42px;
+}
+
+.fork::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--stroke);
+  height: 22px;
+  margin-left: calc(var(--stroke) / -2);
+  background: var(--wire);
+}
+
+.fork::after,
+.bracket::after {
+  content: "";
+  position: absolute;
+  left: calc((100% - 2 * var(--gap)) / 6);
+  right: calc((100% - 2 * var(--gap)) / 6);
+  height: var(--stroke);
+  background: var(--wire);
+}
+
+.fork::after {
+  top: 21px;
+}
+
+.fork i,
+.bracket i {
+  position: relative;
+}
+
+.fork i::before {
+  content: "";
+  position: absolute;
+  top: 21px;
+  bottom: 6px;
+  left: 50%;
+  width: var(--stroke);
+  margin-left: calc(var(--stroke) / -2);
+  background: var(--wire);
+}
+
+.fork i::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  margin-left: -5px;
+  border: 5px solid transparent;
+  border-top: 7px solid var(--wire);
+  border-bottom: 0;
+}
+
+.bracket {
+  height: 22px;
+}
+
+.bracket::after {
+  top: 15px;
+}
+
+.bracket i::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--stroke);
+  height: 16px;
+  margin-left: calc(var(--stroke) / -2);
+  background: var(--wire);
+}
+
+.bracket i:last-child::before {
+  top: 6px;
+  height: 10px;
+}
+
+.bracket i:last-child::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  margin-left: -5px;
+  border: 5px solid transparent;
+  border-bottom: 7px solid var(--wire);
+  border-top: 0;
+}
+
+.bracket-label {
+  display: flex;
+  justify-content: center;
+  margin: 4px 0 0;
+}
+
+/* Quatre colonnes : variante de .trio, .fork et .bracket */
+
+.trio.quad,
+.fork.quad,
+.bracket.quad {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.fork.quad::after,
+.bracket.quad::after {
+  left: calc((100% - 3 * var(--gap)) / 8);
+  right: calc((100% - 3 * var(--gap)) / 8);
+}
+
+/* ─── Infrastructure ─────────────────────────────────────── */
+
+.uplink {
+  display: flex;
+  justify-content: center;
+}
+
+.bus {
+  position: relative;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border: var(--stroke) solid var(--wire);
+  border-radius: 6px;
+  background: var(--card);
+  font: 600 12.5px/1.3 var(--mono);
+}
+
+.bus span {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.bus::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  width: var(--stroke);
+  height: 82px;
+  margin-left: calc(var(--stroke) / -2);
+  background: var(--wire);
+}
+
+.guests,
+.taps,
+.storage {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.guests .card {
+  padding-inline: 10px;
+}
+
+.guests .card h3 {
+  font-size: 13px;
+}
+
+.guests .card .top {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+/* Ressources d'un conteneur, dans une infobulle */
+
+.res {
+  position: absolute;
+  top: 8px;
+  right: 6px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  color: var(--muted);
+  cursor: help;
+}
+
+.res .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.res:hover,
+.res:focus-visible {
+  color: var(--fg);
+  background: var(--zone);
+}
+
+.res:focus-visible {
+  outline: var(--stroke) solid var(--accent);
+  outline-offset: 1px;
+}
+
+.res-tip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  z-index: 5;
+  display: grid;
+  gap: 2px;
+  padding: 6px 9px;
+  border-radius: 6px;
+  background: var(--fg);
+  color: var(--bg);
+  font: 11px/1.35 var(--mono);
+  text-align: left;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 2px);
+  transition: opacity 150ms, transform 150ms, visibility 0s 150ms;
+}
+
+.res-tip b {
+  font-weight: 600;
+}
+
+.res:hover .res-tip,
+.res:focus .res-tip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%);
+  transition: opacity 150ms, transform 150ms, visibility 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .res-tip {
+    transform: translateX(-50%);
+  }
+}
+
+.taps {
+  height: 18px;
+}
+
+.taps i {
+  position: relative;
+}
+
+.taps i::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: var(--stroke);
+  margin-left: calc(var(--stroke) / -2);
+  background: var(--wire);
+}
+
+.storage {
+  padding-inline: 15px;
+}
+
+.storage .lvm {
+  grid-column: 1 / 5;
+  grid-row: 2;
+}
+
+.storage .hdd {
+  grid-column: 5 / -1;
+  grid-row: 2;
+}
+
+.mount {
+  position: relative;
+  grid-column: 5;
+  grid-row: 1;
+  height: 32px;
+}
+
+.mount::before {
+  content: "";
+  position: absolute;
+  top: -11px;
+  bottom: -10px;
+  left: 50%;
+  width: var(--stroke);
+  margin-left: calc(var(--stroke) / -2);
+  background: var(--wire);
+}
+
+.mount::after {
+  content: "";
+  position: absolute;
+  top: -17px;
+  left: 50%;
+  margin-left: -5px;
+  border: 5px solid transparent;
+  border-bottom: 7px solid var(--wire);
+  border-top: 0;
+}
+
+.mount .wire-label {
+  position: absolute;
+  top: 50%;
+  right: calc(50% + 12px);
+  transform: translateY(-50%);
+}
+
+/* ─── Gestion ────────────────────────────────────────────── */
+
+.mg {
+  --pad: 14px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 160px minmax(0, 1fr);
+  row-gap: var(--gap);
+}
+
+.mg > * {
+  position: relative;
+  z-index: 1;
+}
+
+.mg > .mg-zone {
+  z-index: 0;
+  grid-row: 1 / 10;
+}
+
+.mg-zone.admin {
+  grid-column: 1;
+}
+
+.mg-zone.lab {
+  grid-column: 3;
+  grid-row: 3 / 10;
+}
+
+.mg .zone-label {
+  position: static;
+  padding: 12px var(--pad) 0;
+}
+
+.mg > .card,
+.mg > .down {
+  margin-inline: var(--pad);
+}
+
+.mg > .card.tall {
+  align-self: stretch;
+}
+
+.mg > .link {
+  margin-inline: calc(-1 * var(--pad) - 1px);
+}
+
+.mg > .down {
+  margin-block: calc(-1 * var(--gap));
+}
+
+.mg .end {
+  grid-column: 1 / -1;
+  grid-row: 9;
+  height: 4px;
+}
+
+/* ─── Petits écrans ──────────────────────────────────────── */
+
+@container diagram (max-width: 719px) {
+  .duo,
+  .pair,
+  .lan-top,
+  .trio,
+  .trio.quad,
+  .guests,
+  .storage {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .guests,
+  .storage {
+    gap: var(--gap);
+  }
+
+  .guests .card .top {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pair + .down,
+  .lan-top + .down {
+    --x: 50%;
+  }
+
+  .lan-top > [class*="at-"] {
+    grid-area: auto;
+  }
+
+  .down.rev::before {
+    top: 6px;
+    bottom: 0;
+  }
+
+  .down.rev::after {
+    top: 0;
+    bottom: auto;
+    border-top: 0;
+    border-bottom: 7px solid var(--wire);
+  }
+
+  .fork,
+  .bracket,
+  .taps,
+  .mount,
+  .bus::before,
+  .mg > .mg-zone,
+  .mg .end {
+    display: none;
+  }
+
+  .fence {
+    padding-top: 26px;
+  }
+
+  .bus {
+    margin-bottom: var(--gap);
+  }
+
+  .storage {
+    margin-top: var(--gap);
+    padding-inline: 0;
+  }
+
+  .storage .lvm,
+  .storage .hdd {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .link {
+    align-self: stretch;
+    min-height: 44px;
+  }
+
+  .link::before {
+    top: 0;
+    bottom: 6px;
+    left: 50%;
+    right: auto;
+    width: var(--stroke);
+    height: auto;
+    margin: 0 0 0 calc(var(--stroke) / -2);
+  }
+
+  .link::after {
+    top: auto;
+    bottom: 0;
+    left: 50%;
+    right: auto;
+    margin: 0 0 0 -5px;
+    border: 5px solid transparent;
+    border-top: 7px solid var(--wire);
+    border-bottom: 0;
+  }
+
+  .link.two::before {
+    top: 6px;
+  }
+
+  .link.two > i {
+    top: 0;
+    left: 50%;
+    margin: 0 0 0 -5px;
+    border: 5px solid transparent;
+    border-bottom: 7px solid var(--wire);
+    border-top: 0;
+  }
+
+  .link > .wire-label {
+    top: 50%;
+    bottom: auto;
+    left: calc(50% + 12px);
+    right: auto;
+    transform: translateY(-50%);
+  }
+
+  .mg {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mg .zone-label {
+    padding: 16px 0 4px;
+  }
+
+  .mg > .card,
+  .mg > .down,
+  .mg > .link {
+    margin: 0;
+  }
+}
+
+}
