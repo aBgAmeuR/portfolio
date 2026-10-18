@@ -12,16 +12,26 @@ export interface Props {
 const { company, job, date, logo, link } = Astro.props;
 ---
 
-<div class="flex items-center gap-2">
-  <Image src={logo} alt={company} class="size-9 object-cover" />
-  <div class="flex flex-col flex-1">
-    <div class="flex justify-between">
-      <h3 class="font-medium leading-tight">{job}</h3>
-      <span class="text-sm text-muted-foreground">
+<div class="flex items-start gap-3 ">
+  <div
+    class="size-10 shrink-0 overflow-hidden rounded-xs bg-card"
+  >
+    <Image src={logo} alt={company} class="size-full object-cover" />
+  </div>
+  <div class="flex min-w-0 flex-1 flex-col">
+    <div class="flex items-start justify-between gap-3">
+      <h4 class="text-base font-medium leading-tight text-primary">{job}</h4>
+      <span class="shrink-0 text-sm text-muted whitespace-nowrap tabular-nums">
         {date}
       </span>
     </div>
-    <a href={link} class="text-sm text-muted w-fit hover:underline" target="_blank" rel="noreferrer noopener">
+    <a
+      href={link}
+      target="_blank"
+      rel="noreferrer noopener"
+      class="pressable pressable-tint mt-0.5 inline-flex w-fit text-sm text-muted no-underline rounded-sm outline-none hover:text-primary focus-visible:ring-2 focus-visible:ring-ring ring-offset-background focus-visible:ring-offset-2"
+      aria-label={`Voir le site de ${company} - s'ouvre dans un nouvel onglet`}
+    >
       {company}
     </a>
   </div>
