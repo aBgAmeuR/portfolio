@@ -40,6 +40,12 @@ export default defineConfig({
     weights: [400, 500, 600, 700],
     cssVariable: "--font-sans",
     subsets: ["latin"],
+  }, {
+    provider: fontProviders.google(),
+    name: "Geist Mono",
+    weights: [400, 500, 600],
+    cssVariable: "--font-mono",
+    subsets: ["latin"],
   }],
 
   adapter: cloudflare({

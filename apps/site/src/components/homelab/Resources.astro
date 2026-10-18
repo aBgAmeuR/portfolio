@@ -1,0 +1,31 @@
+---
+import Glyph from "./Glyph.astro";
+import type { Guest } from "./data";
+
+export interface Props {
+  guest: Guest;
+}
+
+const { guest } = Astro.props;
+
+const memory = guest.memory >= 1024 ? `${guest.memory / 1024} Go` : `${guest.memory} Mo`;
+const rows = [
+  [guest.cores > 1 ? "cœurs" : "cœur", String(guest.cores)],
+  ["RAM", memory],
+  ["disque", `${guest.disk} Go`],
+];
+const label = `Ressources du CT ${guest.id} : ${guest.cores} ${rows[0][0]}, ${memory} de RAM, ${guest.disk} Go de disque`;
+---
+
+<button type="button" class="res" aria-label={label}>
+  <Glyph name="cpu" />
+  <span class="res-tip" aria-hidden="true">
+    {
+      rows.map(([name, value]) => (
+        <span>
+          <b>{value}</b> {name}
+        </span>
+      ))
+    }
+  </span>
+</button>

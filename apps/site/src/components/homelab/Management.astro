@@ -1,0 +1,67 @@
+---
+import Card from "./Card.astro";
+import Glyph from "./Glyph.astro";
+---
+
+<div class="diagram">
+  <figure class="mg" aria-label="Vue gestion : du dépôt Git aux conteneurs">
+    <div class="mg-zone zone admin" aria-hidden="true"></div>
+    <div class="mg-zone zone lab" aria-hidden="true"></div>
+
+    <p class="zone-label" style="grid-column: 1; grid-row: 1"><Glyph name="laptop" />Poste d’admin</p>
+
+    <Card style="grid-column: 1; grid-row: 2" tag="Git" title="homelab-iac" logo="git">
+      <p>code et secrets chiffrés avec SOPS</p>
+    </Card>
+
+    <div class="link two" style="grid-column: 2; grid-row: 2">
+      <i></i>
+      <span class="wire-label">git push</span>
+    </div>
+
+    <Card style="grid-column: 3; grid-row: 2" tag="Dépôt distant" title="GitHub" logo="github">
+      <p>Renovate et releases, aucun accès au homelab</p>
+    </Card>
+
+    <p class="zone-label" style="grid-column: 3; grid-row: 3"><Glyph name="home" />Homelab</p>
+
+    <Card class="tall" style="grid-column: 1; grid-row: 4 / 6" tag="Provisionnement" title="Terraform" logo="terraform">
+      <p>crée les conteneurs et leur pare-feu</p>
+    </Card>
+
+    <div class="link two" style="grid-column: 2; grid-row: 4">
+      <i></i>
+      <span class="wire-label">S3 · état</span>
+    </div>
+
+    <Card style="grid-column: 3; grid-row: 4" tag="CT 112" title="État Terraform" logo="garage">
+      <p>stocké dans Garage S3</p>
+    </Card>
+
+    <div class="link" style="grid-column: 2; grid-row: 5">
+      <span class="wire-label">API Proxmox</span>
+    </div>
+
+    <Card style="grid-column: 3; grid-row: 5" tag="Hyperviseur" title="Proxmox VE" logo="proxmox">
+      <p>nœud pve</p>
+    </Card>
+
+    <div class="down" style="grid-column: 3; grid-row: 6">
+      <span class="wire-label">crée</span>
+    </div>
+
+    <Card style="grid-column: 1; grid-row: 7" tag="Configuration" title="Ansible" logo="ansible">
+      <p>installe et configure les logiciels</p>
+    </Card>
+
+    <div class="link" style="grid-column: 2; grid-row: 7">
+      <span class="wire-label">SSH</span>
+    </div>
+
+    <Card style="grid-column: 3; grid-row: 7" tag="CT 111 à 116 et 118" title="Conteneurs" icon="box">
+      <p>monitoring, garage, caddy, auth, docker, dns, vpn</p>
+    </Card>
+
+    <div class="end" aria-hidden="true"></div>
+  </figure>
+</div>

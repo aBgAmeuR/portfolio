@@ -1,6 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import AreaChart from "./common/AreaChart.astro";
+import { guests } from "./homelab/data";
 
 const card = "rounded-xl border border-border bg-card overflow-hidden";
 const brand =
@@ -12,12 +13,12 @@ const gauges = [
   { label: "ZFS", fill: "52%" },
 ];
 
-const edge = ["cloudflare", "wireguard"];
+const edge = ["wireguard", "caddy"];
 
 const containers = [
   { icon: "grafana", name: "Grafana" },
-  { icon: "nginx-proxy-manager", name: "Nginx Proxy Manager" },
-  { icon: "prometheus", name: "Prometheus" },
+  { icon: "tinyauth", name: "TinyAuth" },
+  { icon: "blocky", name: "Blocky" },
 ];
 ---
 
@@ -26,10 +27,10 @@ const containers = [
   aria-label="Voir le homelab"
   class="group relative mt-12 flex w-full max-w-3xl flex-col justify-center gap-4 overflow-hidden bg-foreground p-6 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background min-[672px]:rounded-2xl"
 >
-  <div class="relative z-10 flex flex-col gap-4">
+  <div class="relative z-10 flex max-w-44 flex-col gap-4 sm:max-w-none">
     <div>
       <h3 class="font-semibold">Homelab</h3>
-      <p class="text-muted">Monitoring, réseau et services auto-hébergés</p>
+      <p class="text-muted">Proxmox, entièrement décrit en code</p>
     </div>
     <span class="inline-flex items-center gap-1.5 text-sm text-muted">
       Voir
@@ -41,7 +42,7 @@ const containers = [
   </div>
 
   <div
-    class="pointer-events-none absolute -bottom-4 -right-6 flex items-end gap-1"
+    class="pointer-events-none absolute -bottom-4 -right-32 flex sm:-right-6 items-end gap-1"
     aria-hidden="true"
   >
     <div class="flex w-32 flex-col gap-1">
@@ -90,10 +91,10 @@ const containers = [
       </div>
       <div class={card}>
         <div class="flex h-9 items-center gap-2 border-b border-border px-3">
-          <Icon name="docker" class:list={["size-4 shrink-0", brand]} />
+          <Icon name="terraform" class:list={["size-4 shrink-0", brand]} />
           <span class="text-[0.7rem] leading-none">
-            <span class="font-medium">22</span>
-            <span class="text-muted">services</span>
+            <span class="font-medium">{guests.length}</span>{" "}
+            <span class="text-muted">conteneurs</span>
           </span>
         </div>
         <ul class="divide-y divide-border">

@@ -1,0 +1,23 @@
+---
+import { Icon } from "astro-icon/components";
+import Glyph from "./Glyph.astro";
+
+export interface Props {
+  logo?: string;
+  icon?: string;
+  tall?: boolean;
+  small?: boolean;
+}
+
+const { logo, icon, tall = false, small = false } = Astro.props;
+---
+
+<span class:list={["ico", small && "sm"]}>
+  {
+    logo ? (
+      <Icon name={logo} class:list={["logo", tall && "tall"]} aria-hidden="true" />
+    ) : (
+      icon && <Glyph name={icon} />
+    )
+  }
+</span>
