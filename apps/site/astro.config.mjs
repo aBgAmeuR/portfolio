@@ -12,15 +12,20 @@ export default defineConfig({
   site: 'https://antoinejosset.fr',
   trailingSlash: "never",
 
-  integrations: [icon(), sitemap({
-    filter: (page) => {
-      const excludePatterns = ['404', '500', 'player'];
-      return !excludePatterns.some(pattern => page.includes(pattern));
-    },
-    changefreq: 'weekly',
-    priority: 0.7,
-    lastmod: new Date()
-  }), robotsTxt(), react()],
+  integrations: [
+    icon(),
+    sitemap({
+      filter: (page) => {
+        const excludePatterns = ['404', '500'];
+        return !excludePatterns.some(pattern => page.includes(pattern));
+      },
+      changefreq: 'weekly',
+      priority: 0.7,
+      lastmod: new Date()
+    }),
+    robotsTxt(),
+    react(),
+  ],
 
   vite: {
     plugins: [tailwindcss()],
