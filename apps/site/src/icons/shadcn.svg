@@ -1,4 +1,1 @@
-<svg viewBox="0 0 256 256" width="16" height="16">
-  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"
-    d="m208 128-80 80M192 40 40 192" />
-</svg>
+<svg width="16" height="16" viewBox="0 0 256 256"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" d="m208 128-80 80m64-168L40 192"/></svg>

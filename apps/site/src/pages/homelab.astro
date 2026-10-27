@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import "../components/homelab/diagram.css";
 import { Icon } from "astro-icon/components";
+import { Font } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
@@ -56,6 +57,7 @@ const choices = [
   title="Homelab - Antoine JOSSET"
   description="Mon homelab Proxmox, décrit en code avec Terraform et Ansible."
 >
+  <Font slot="head" cssVariable="--font-mono" />
   <Header showTitle={false} />
 
   <section class="px-6 flex flex-col gap-3" aria-labelledby="homelab-title">

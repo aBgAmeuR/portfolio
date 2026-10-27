@@ -5,7 +5,6 @@ import icon from 'astro-icon';
 import sitemap from "@astrojs/sitemap";
 import robotsTxt from 'astro-robots-txt';
 import cloudflare from '@astrojs/cloudflare';
-import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
@@ -24,8 +23,11 @@ export default defineConfig({
       lastmod: new Date()
     }),
     robotsTxt(),
-    react(),
   ],
+
+  build: {
+    inlineStylesheets: "always",
+  },
 
   vite: {
     plugins: [tailwindcss()],
@@ -38,12 +40,14 @@ export default defineConfig({
     provider: fontProviders.google(),
     name: "Geist",
     weights: [400, 500, 600, 700],
+    styles: ["normal"],
     cssVariable: "--font-sans",
     subsets: ["latin"],
   }, {
     provider: fontProviders.google(),
     name: "Geist Mono",
     weights: [400, 500, 600],
+    styles: ["normal"],
     cssVariable: "--font-mono",
     subsets: ["latin"],
   }],

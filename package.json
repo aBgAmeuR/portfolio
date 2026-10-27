@@ -11,10 +11,6 @@
     "turbo": "^2.9.6"
   },
   "packageManager": "pnpm@10.16.1",
-  "dependencies": {
-    "dotenv": "^16.4.7",
-    "dotenv-cli": "^8.0.0"
-  },
   "engines": {
     "node": ">=20"
   }

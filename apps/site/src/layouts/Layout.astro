@@ -32,41 +32,29 @@ const {
 		/>
 		<meta name="author" content="Antoine JOSSET" />
 		<meta name="robots" content="index, follow" />
-		
-
 		<Font cssVariable="--font-sans" preload />
-		<Font cssVariable="--font-mono" />
+		<slot name="head" />
+
+		<script is:inline>
+			(() => {
+				const root = document.documentElement;
+				let stored = null;
+				try { stored = localStorage.getItem("theme"); } catch {}
+				const dark = stored
+					? stored === "dark"
+					: matchMedia("(prefers-color-scheme: dark)").matches;
+				root.classList.toggle("dark", dark);
+				new MutationObserver(() => {
+					try {
+						localStorage.setItem("theme", root.classList.contains("dark") ? "dark" : "light");
+					} catch {}
+				}).observe(root, { attributes: true, attributeFilter: ["class"] });
+			})();
+		</script>
 	</head>
 	<body class="bg-background antialiased text-primary font-sans">
 		<main class="w-full mx-auto max-w-2xl pt-16 md:pt-32">
 			<slot />
 		</main>
-
-		<script is:inline>
-			const getThemePreference = () => {
-				if (
-					typeof localStorage !== "undefined" &&
-					localStorage.getItem("theme")
-				) {
-					return localStorage.getItem("theme");
-				}
-				return window.matchMedia("(prefers-color-scheme: dark)").matches
-					? "dark"
-					: "light";
-			};
-			const isDark = getThemePreference() === "dark";
-			document.documentElement.classList.toggle("dark", isDark);
-
-			if (typeof localStorage !== "undefined") {
-				const observer = new MutationObserver(() => {
-					const isDark = document.documentElement.classList.contains("dark");
-					localStorage.setItem("theme", isDark ? "dark" : "light");
-				});
-				observer.observe(document.documentElement, {
-					attributes: true,
-					attributeFilter: ["class"],
-				});
-			}
-		</script>
 	</body>
 </html>

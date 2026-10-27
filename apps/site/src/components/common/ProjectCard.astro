@@ -1,7 +1,7 @@
 ---
 import TechnologyTooltip from "./TechnologyTooltip.astro";
 import ProjectButton from "./ProjectButton.astro";
-import { Image } from "astro:assets";
+import { Image, getImage } from "astro:assets";
 
 type Technology = {
   name: string;
@@ -12,6 +12,7 @@ export interface Props {
   title: string;
   description: string;
   image: ImageMetadata | string;
+  poster?: ImageMetadata;
   imageAlt?: string;
   technologies: Technology[];
   demoUrl?: string;
@@ -22,6 +23,7 @@ const {
   title,
   description,
   image,
+  poster,
   imageAlt = "Project image",
   demoUrl,
   codeUrl,
@@ -30,6 +32,10 @@ const {
 const technologies: Technology[] = Astro.props.technologies;
 const titleId = `project-title-${title.replace(/\s+/g, "-").toLowerCase()}`;
 const descId = `project-desc-${title.replace(/\s+/g, "-").toLowerCase()}`;
+
+// Card media is ~330px wide from sm up, and nearly full width below.
+const sizes = "(min-width: 640px) 330px, calc(100vw - 72px)";
+const posterImage = poster && (await getImage({ src: poster, width: 660 }));
 ---
 
 <article
@@ -45,18 +51,27 @@ const descId = `project-desc-${title.replace(/\s+/g, "-").toLowerCase()}`;
       {
         typeof image === "string" ? (
           <video
+            data-lazy-video
             src={image}
-            autoplay
+            poster={posterImage?.src}
+            preload="none"
             loop
             muted
             playsinline
-            width="1920"
-            height="993"
+            width="960"
+            height="540"
+            class="size-full object-cover"
             aria-label={`Démonstration vidéo du projet ${title}`}
             title={`Démonstration du projet ${title}`}
           ></video>
         ) : (
-          <Image src={image} alt={imageAlt} class="size-full object-cover" />
+          <Image
+            src={image}
+            alt={imageAlt}
+            widths={[400, 660, 990]}
+            sizes={sizes}
+            class="size-full object-cover"
+          />
         )
       }
     </div>
@@ -115,3 +130,32 @@ const descId = `project-desc-${title.replace(/\s+/g, "-").toLowerCase()}`;
     </div>
   </div>
 </article>
+
+<script>
+  // Only fetch the demo video once it's near the viewport, and never
+  // auto-download it on data saver, 2G/3G, or for reduced-motion users.
+  const connection = (navigator as Navigator & {
+    connection?: { saveData?: boolean; effectiveType?: string };
+  }).connection;
+  const constrained =
+    !!connection?.saveData ||
+    /2g|3g/.test(connection?.effectiveType ?? "") ||
+    matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  for (const video of document.querySelectorAll<HTMLVideoElement>("video[data-lazy-video]")) {
+    if (constrained) {
+      video.controls = true;
+      continue;
+    }
+    new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          video.play().catch(() => (video.controls = true));
+        } else {
+          video.pause();
+        }
+      },
+      { rootMargin: "200px" },
+    ).observe(video);
+  }
+</script>
